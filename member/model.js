@@ -10,7 +10,7 @@ class Member{
     constructor(data){
         this.name = data.name;
         this.gender = data.gender;
-        this.birthday = data.birthday;
+        this.birthday = new Date(data.birthday).toISOString();
     }
 }
 
