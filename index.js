@@ -1,5 +1,5 @@
 const MemberService = require('./member');
-
+const AdminService = require('./admin')
 const Knex = require('knex');
 const Express = require('express');
 const app = Express();
@@ -21,7 +21,7 @@ class App{
     constructor(){
         this.db = Knex(dbConfig); 
         this.memberService = new MemberService({app, db:this.db})
-
+        this.adminService = new AdminService({app, db:this.db})
     }
     async start(){
         app.listen(3000, () => {
