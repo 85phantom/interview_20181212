@@ -1,5 +1,7 @@
 const MemberService = require('./member');
-const AdminService = require('./admin')
+const AdminService = require('./admin');
+const LoginService = require('./login');
+
 const Knex = require('knex');
 const Express = require('express');
 const app = Express();
@@ -22,6 +24,7 @@ class App{
         this.db = Knex(dbConfig); 
         this.memberService = new MemberService({app, db:this.db})
         this.adminService = new AdminService({app, db:this.db})
+        this.LoginService = new LoginService({app, db:this.db, adminService: this.adminService})
     }
     async start(){
         app.listen(3000, () => {

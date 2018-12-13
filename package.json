@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/85phantom/interview_20181212#readme",
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
     "knex": "^0.16.2",
     "mysql2": "^1.6.4"
   }

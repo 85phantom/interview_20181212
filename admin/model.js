@@ -1,5 +1,4 @@
 class Admin{
-
     /**
      *Creates an instance of Admin.
      * @param {Object} data
@@ -12,5 +11,4 @@ class Admin{
         this.password = data.password;
     }
 }
-
 module.exports = Admin

@@ -9,4 +9,6 @@ const db = {
     }
 }
 
-module.exports = { db };
+const key = 'nyanyanyanya';
+
+module.exports = { db , key};

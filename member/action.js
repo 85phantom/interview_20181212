@@ -24,7 +24,7 @@ class MemberAction{
 
             return{
                 page_total: Math.ceil(memberCount[0].count / this.memberPerPage),
-                member: memberList
+                data: memberList
             }
         } catch (error) {
             throw new newError(500, "Something goes wrong", error);

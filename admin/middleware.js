@@ -9,6 +9,7 @@ class AdminMiddleware{
             console.log(req.body);
             try {
                 const admin = await this.adminActions.createAdmin(req.body);
+                delete admin.password;
                 return res.status(200).json(admin)
             } catch (error) {
                 console.error(error);
@@ -20,6 +21,10 @@ class AdminMiddleware{
         return async(req, res) => {
             try {
                 const admin = await this.adminActions.findAdmin(req.query);
+                console.log(admin)
+                admin.data.forEach(adm => {
+                    delete adm.password;    
+                });
                 return res.status(200).json(admin);
             } catch (error) {
                 console.error(error);
@@ -31,6 +36,7 @@ class AdminMiddleware{
         return async(req, res) => {
             try {
                 const admin = await this.adminActions.updateAdmin(parseInt(req.params.id), req.body)
+                delete admin.password;
                 return res.status(200).json(admin);
             } catch (error) {
                 console.error(error);
