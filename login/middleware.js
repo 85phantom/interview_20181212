@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 const Admin = require('../admin/model')
 const config = require('../config')
 const key = config.key
+const verifyAdmin = require('./verify');
+
 class loginAction{
     constructor(option){
         this.db = option.db;
@@ -28,7 +30,6 @@ class loginAction{
             if(this.adminExistCheck(newAdmin)){
                 const dbAdminQueryResult = await this.adminService.action.findAdmin({ email: newAdmin.email })
                 const dbAdmin = dbAdminQueryResult.data[0]
-                console.log("dbadmin: ", dbAdmin)
                 const compare = await bcrypt.compare(newAdmin.password , dbAdmin.password)
                 if(compare){
                     const accesstoken = jwt.sign({ email: newAdmin.email }, key ,{expiresIn:'1d'});

@@ -8,6 +8,8 @@ class AdminMiddleware{
         return async(req, res) => {
             console.log(req.body);
             try {
+                const app = req.app;
+                
                 const admin = await this.adminActions.createAdmin(req.body);
                 delete admin.password;
                 return res.status(200).json(admin)

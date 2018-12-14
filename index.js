@@ -22,9 +22,14 @@ const dbConfig = {
 class App{
     constructor(){
         this.db = Knex(dbConfig); 
-        this.memberService = new MemberService({app, db:this.db})
-        this.adminService = new AdminService({app, db:this.db})
-        this.LoginService = new LoginService({app, db:this.db, adminService: this.adminService})
+        this.memberService = new MemberService({app, db:this.db});
+        this.adminService = new AdminService({app, db:this.db});
+        this.LoginService = new LoginService({app, db:this.db, adminService: this.adminService});
+        app.service = {}
+        app.service.memberService = this.memberService;
+        app.service.adminService = this.adminService;
+        app.service.LoginService = this.LoginService;
+
     }
     async start(){
         app.listen(3000, () => {
