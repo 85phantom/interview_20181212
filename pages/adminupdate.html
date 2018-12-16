@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <script src="https://vuejs.org/js/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div>修改管理者</div>
+            <input v-model="email" placeholder="email" >
+            <input v-model="password" type="password" placeholder="password">
+            <button v-on:click="update()">update</button>
+        </div>
+          <script>
+            new Vue({
+                el: '#app',
+                data: {
+                    token: "",
+                    email:"",
+                    password:"",
+                    id:"",
+                    admin:""
+                },
+                
+                created: function () {
+                    const token = localStorage.getItem('token')
+                    this.token = token;
+                    const id = document.URL.split('?')[1].split('=')[1];
+                    this.id = id ; 
+                    this.getAdminById();
+                },
+
+                methods: {
+                    getAdminById(){
+                        return axios.get('http://127.0.0.1:3000/admin/'+this.id,  { 
+                            headers: {'Authorization': this.token},
+                            params:{
+                                page:this.page
+                            }
+                        })
+                        .then(response => {
+                            // handle success
+                            this.email = response.data[0].email;
+                            console.log('email:',this.email);
+                            
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                    },
+                    update(){
+                        axios.put('http://127.0.0.1:3000/admin/'+this.id, {
+                            email: this.email,
+                            password: this.password
+                        },{ headers: {'Authorization': this.token}})
+                        .then(function (response) {
+                            window.location = 'admin.html'
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    }
+                }
+            })
+          </script>
+    </body>
+</html>

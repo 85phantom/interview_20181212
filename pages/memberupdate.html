@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <script src="https://vuejs.org/js/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div>修改會員</div>
+            <input v-model="name" placeholder="name">
+            <select v-model= "gender">
+                    <option value="male">male</option>
+                    <option value="female">female</option>
+                    <option value="others">others</option>
+            </select>
+            <input v-model="birthday" placeholder="birthday">
+            <button v-on:click="update()">update</button>
+        </div>
+          <script>
+            new Vue({
+                el: '#app',
+                data: {
+                    token: "",
+                    name:"",
+                    gender:"",
+                    birthday:"",
+                    id:""
+                },
+                
+                created: function () {
+                    const token = localStorage.getItem('token')
+                    this.token = token;
+                    const id = document.URL.split('?')[1].split('=')[1];
+                    this.id = id
+                    this.getMemberById();
+                },
+
+                methods: {
+                    getMemberById(){
+                        return axios.get('http://127.0.0.1:3000/member/'+this.id,  { 
+                            headers: {'Authorization': this.token},
+                            params:{
+                                page:this.page
+                            }
+                        })
+                        .then(response => {
+                            // handle success
+                            this.name = response.data[0].name;
+                            this.gender = response.data[0].gender;
+                            this.birthday = response.data[0].birthday;
+                            console.log('data:',this.data);
+                            
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                    },
+                    update(){
+                        axios.put('http://127.0.0.1:3000/member/'+this.id, {
+                            name: this.name,
+                            gender: this.gender,
+                            birthday: this.birthday
+                        },{ headers: {'Authorization': this.token}})
+                        .then(function (response) {
+                            window.location = 'member.html'
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    }
+                }
+            })
+          </script>
+    </body>
+</html>

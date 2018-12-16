@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <script src="https://vuejs.org/js/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div>管理者頁面</div>
+            <button v-on:click="create()">create</button>
+            <li v-for="admin in adminList">
+                    email: {{ admin.email }}
+                    <button v-on:click="edit(admin.id)">edit</button>
+                    <button v-on:click="remove(admin.id)">delete</button>
+            </li>
+            <button v-on:click="pagePlus()">+</button>
+            <button v-on:click="pageMinus()">-</button>
+            <div>
+                <button v-on:click="logout">logout</button
+            ></div>
+        </div>
+          <script>
+            new Vue({
+                el: '#app',
+                data: {
+                    adminList: [ ],
+                    token: "",
+                    page:1
+                },
+                
+                created: function () {
+                    const token = localStorage.getItem('token')
+                    this.token = token;
+                    this.getAdmin();
+                        
+                },
+                methods: {
+                    getAdmin(){
+                        return axios.get('http://127.0.0.1:3000/admin',  { 
+                            headers: {'Authorization': this.token},
+                            params:{
+                                page:this.page
+                            }
+                        })
+                        .then(response => {
+                            // handle success
+                            const dataList = response.data.data;
+                            this.adminList = dataList;
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                    },
+                    create(){
+                        window.location = 'admincreate.html'
+                    },
+                    edit(id){
+                        window.location = 'adminupdate.html?id='+id
+                    },
+                    remove(id) {
+                        axios.delete('http://127.0.0.1:3000/admin/'+id, { headers: {'Authorization': this.token}})
+                        .then(response => {
+                            this.getAdmin();
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    },
+                    pagePlus(){
+                        this.page++;
+                        this.getAdmin()
+                    },
+                    pageMinus(){
+                        this.page = (this.page-1 > 1) ? this.page-1 : 1;
+                        this.getAdmin();
+                    },
+                    logout(){
+                        window.location = 'login.html'
+                        localStorage.removeItem('token')
+                    }
+                }
+            })
+          </script>
+    </body>
+</html>

@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <script src="https://vuejs.org/js/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div>新增會員</div>
+            <input v-model="name" placeholder="name">
+            <select v-model= "gender">
+                    <option value="male">male</option>
+                    <option value="female">female</option>
+                    <option value="others">others</option>
+            </select>
+            <input v-model="birthday" placeholder="birthday">
+            <button v-on:click="create">create</button>
+        </div>
+          <script>
+            new Vue({
+                el: '#app',
+                data: {
+                    token: "",
+                    name:"",
+                    gender:"",
+                    birthday:""
+                },
+                
+                created: function () {
+                    const token = localStorage.getItem('token')
+                    this.token = token;
+                        
+                },
+
+                methods: {
+                    create(){
+                        axios.post('http://127.0.0.1:3000/member', {
+                            name: this.name,
+                            gender: this.gender,
+                            birthday: this.birthday
+                        },{ headers: {'Authorization': this.token}})
+                        .then(function (response) {
+                            window.location = 'member.html'
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    }
+                }
+            })
+          </script>
+    </body>
+</html>
