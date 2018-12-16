@@ -14,13 +14,13 @@ const verifyAdmin = () => {
             const email = decoded.email;
             const findQuery = await adminAction.findAdmin({ email: email})
             if(findQuery.data.length !== 1){
-                throw new newError(403, 'Email or Password is wrong.')
+                throw new newError(403, 'User not exist')
             }
             next();
         } catch (error) {
             if(error instanceof newError) 
                 return res.status(error.code).json(error);
-            const newerr = new newError(403, 'Email or Password is wrong.', error)
+            const newerr = new newError(403, 'Permission denied', error)
             return res.status(newerr.code).json(newerr);
         }
     }

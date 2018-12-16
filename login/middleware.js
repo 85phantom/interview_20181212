@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken')
 const Admin = require('../admin/model')
 const config = require('../config')
 const key = config.key
-const verifyAdmin = require('./verify');
 
 class loginAction{
     constructor(option){
@@ -12,22 +11,22 @@ class loginAction{
         this.adminService= option.adminService;
     }
 
-    adminExistCheck(){
-        return async (req, res) => {
-            const admin = req.body;
-            const findLogin = await this.adminService.action.findAdmin({ email: admin.email });
-            if(findLogin.admin.length == 1){
-                return true;
-            }
-            return false;
+    async adminExistCheck(admin){
+        const findLogin = await this.adminService.action.findAdmin({ email: admin.email });
+        console.log("findLogin:",findLogin)
+        if(findLogin.data.length == 1){
+            return true;
         }
+        return false;
+        
     }
 
     adminLogin(){
         return async (req, res) =>{
             const admin = req.body;
             const newAdmin = new Admin(admin)
-            if(this.adminExistCheck(newAdmin)){
+            
+            if(await this.adminExistCheck(newAdmin)){
                 const dbAdminQueryResult = await this.adminService.action.findAdmin({ email: newAdmin.email })
                 const dbAdmin = dbAdminQueryResult.data[0]
                 const compare = await bcrypt.compare(newAdmin.password , dbAdmin.password)

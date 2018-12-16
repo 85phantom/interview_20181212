@@ -5,7 +5,10 @@ const LoginService = require('./login');
 const Knex = require('knex');
 const Express = require('express');
 const app = Express();
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+app.use(cors());
 app.use(bodyParser.json())
 
 const dbConfig = {

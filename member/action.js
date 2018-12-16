@@ -30,6 +30,15 @@ class MemberAction{
             throw new newError(500, "Something goes wrong", error);
         }
     }
+
+    async findMemberById(id){
+        try {
+            const targetMember = this.db('Member').where({id: id});
+            return targetMember;
+        } catch (error) {
+            throw new newError(500, "Something goes wrong", error);
+        }
+    }
     
     async updateMember(memberId, data ={}){
         const newMember = new Member(data);

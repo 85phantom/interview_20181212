@@ -6,7 +6,8 @@ const { check, validationResult } = require('express-validator/check');
 const validateAdmin = [
     check('email').isEmail(),
     check('password').isString()
-]
+];
+
 class MemberService{
     constructor(options){
         this.db = options.db;
@@ -15,9 +16,10 @@ class MemberService{
         const middleware = new Middleware({ adminActions: this.action})
         
         this.app.post('/admin',validateAdmin, verifyAdmin(), middleware.createAdmin());
-        this.app.get('/admin',validateAdmin, verifyAdmin(), middleware.findAdmin());
+        this.app.get('/admin', verifyAdmin(), middleware.findAdmin());
+        this.app.get('/admin/:id', verifyAdmin(), middleware.findAdminById());
         this.app.put('/admin/:id',validateAdmin, verifyAdmin(), middleware.updateAdmin());
-        this.app.delete('/admin/:id',validateAdmin, verifyAdmin(), middleware.deleteAdmin());
+        this.app.delete('/admin/:id', verifyAdmin(), middleware.deleteAdmin());
     }
 }
 

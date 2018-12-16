@@ -40,6 +40,15 @@ class AdminAction{
             throw new newError(500, "Something goes wrong", error);
         }
     }
+    async findAdminById(id){
+        try {
+            console.log('id:', id)
+            const targetAdmin = await this.db('Admin').where({ id });
+            return targetAdmin;
+        } catch (error) {
+            throw new newError(500, "Something goes wrong", error);
+        }
+    }
     
     async updateAdmin(adminId, data ={}){
         const newAdmin = new Admin(data);

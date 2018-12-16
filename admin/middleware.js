@@ -31,18 +31,24 @@ class AdminMiddleware{
     findAdmin(){
         return async(req, res) => {
             try {
-                const validaterror = this.validateAdmin(req);
-                if(validaterror)
-                    throw new newError(400, 'validaterror', validaterror);
-                    
                 const admin = await this.adminActions.findAdmin(req.query);
-                console.log(admin)
                 admin.data.forEach(adm => {
                     delete adm.password;    
                 });
                 return res.status(200).json(admin);
             } catch (error) {
                 console.error(error);
+                return res.status(error.code || 500).json(error);
+            }
+        }
+    }
+    findAdminById(){
+        return async(req, res) =>{
+            try {
+                const admin = await this.adminActions.findAdminById(parseInt(req.params.id));
+                delete admin.password; 
+                return res.status(200).json(admin);
+            } catch (error) {
                 return res.status(error.code || 500).json(error);
             }
         }
@@ -66,10 +72,6 @@ class AdminMiddleware{
     deleteAdmin(){
         return async(req, res) =>{
             try{
-                const validaterror = this.validateAdmin(req);
-                if(validaterror)
-                    throw new newError(400, 'validaterror', validaterror);
-                    
                 const admin = await this.adminActions.deleteAdmin(req.params.id)
                 return res.status(200).json(admin);
             }

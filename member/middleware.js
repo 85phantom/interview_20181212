@@ -1,10 +1,12 @@
+const newError = require('../error');
+const { check, validationResult } = require('express-validator/check');
 
 class MemberMiddleware{
     constructor(options){
         this.memberActions = options.memberActions;
     }
 
-    validateAdmin(req){
+    validateMember(req){
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
         return errors.array()
@@ -15,7 +17,7 @@ class MemberMiddleware{
         return async(req, res) => {
             console.log(req.body);
             try {
-                const validaterror = this.validateAdmin(req)
+                const validaterror = this.validateMember(req)
                 if(validaterror)
                     throw new newError(400, 'validaterror', validaterror);
 
@@ -30,7 +32,7 @@ class MemberMiddleware{
     findMember(){
         return async(req, res) => {
             try {
-                const validaterror = this.validateAdmin(req)
+                const validaterror = this.validateMember(req)
                 if(validaterror)
                     throw new newError(400, 'validaterror', validaterror);
 
@@ -42,10 +44,22 @@ class MemberMiddleware{
             }
         }
     }
+
+    findMemberById(){
+        return async(req, res) =>{
+            try {
+                const member = await this.memberActions.findMemberById(parseInt(req.params.id));
+                return res.status(200).json(member);
+            } catch (error) {
+                return res.status(error.code || 500).json(error);
+            }
+        }
+    }
+
     updateMember(){
         return async(req, res) => {
             try {
-                const validaterror = this.validateAdmin(req)
+                const validaterror = this.validateMember(req)
                 if(validaterror)
                     throw new newError(400, 'validaterror', validaterror);
 
@@ -60,7 +74,7 @@ class MemberMiddleware{
     deleteMember(){
         return async(req, res) =>{
             try{
-                const validaterror = this.validateAdmin(req)
+                const validaterror = this.validateMember(req)
                 if(validaterror)
                     throw new newError(400, 'validaterror', validaterror);
 
